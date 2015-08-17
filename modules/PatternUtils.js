@@ -1,30 +1,4 @@
-import qs from 'qs';
 import invariant from 'invariant';
-
-export var parseQueryString = qs.parse;
-
-export function stringifyQuery(query) {
-  return qs.stringify(query, { arrayFormat: 'brackets' });
-}
-
-var queryMatcher = /\?([\s\S]*)$/;
-
-export function getPathname(path) {
-  return path.replace(queryMatcher, '');
-}
-
-export function getQueryString(path) {
-  var match = path.match(queryMatcher);
-  return match ? match[1] : '';
-}
-
-export function stripLeadingSlashes(path) {
-  return path ? path.replace(/^\/+/, '') : '';
-}
-
-export function isAbsolutePath(path) {
-  return typeof path === 'string' && path.charAt(0) === '/';
-}
 
 function escapeRegExp(string) {
   return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -103,7 +77,7 @@ export function compilePattern(pattern) {
  * - paramValues
  */
 export function matchPattern(pattern, pathname) {
-  var { regexpSource, paramNames, tokens } = compilePattern(stripLeadingSlashes(pattern));
+  var { regexpSource, paramNames, tokens } = compilePattern(pattern);
 
   regexpSource += '/*'; // Ignore trailing slashes
 
@@ -141,7 +115,7 @@ export function getParamNames(pattern) {
 }
 
 export function getParams(pattern, pathname) {
-  var { paramNames, paramValues } = matchPattern(pattern, stripLeadingSlashes(pathname));
+  var { paramNames, paramValues } = matchPattern(pattern, pathname);
 
   if (paramValues != null) {
     return paramNames.reduce(function (memo, paramName, index) {

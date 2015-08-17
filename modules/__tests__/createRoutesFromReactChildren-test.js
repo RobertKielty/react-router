@@ -1,7 +1,7 @@
 import expect from 'expect';
 import React from 'react';
-import Route from '../Route';
 import { createRoutesFromReactChildren } from '../RouteUtils';
+import Route from '../Route';
 
 describe('createRoutesFromReactChildren', function () {
 
@@ -29,11 +29,13 @@ describe('createRoutesFromReactChildren', function () {
   });
  
   it('works with nested routes', function () {
-    expect(createRoutesFromReactChildren(
+    var routes = createRoutesFromReactChildren(
       <Route component={Parent}>
         <Route path="home" components={{ hello: Hello, goodbye: Goodbye }}/>
       </Route>
-    )).toEqual([
+    );
+
+    expect(routes).toEqual([
       {
         component: Parent,
         childRoutes: [
